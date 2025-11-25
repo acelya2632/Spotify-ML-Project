@@ -1,36 +1,54 @@
-In this datasets file we have all the data preprocess for each approach.
-Approach1:
-fileStructure:
-popularity,target_binary,popularity_minmax
-6,0,0.06
-23,0,0.23
-0,0,0.0
-57,1,0.57
-99,1,0.99
-For the first one the needed feature is only the populairty(cleaned and well preprocessed)
-assuming that we will do a binary classification and we have no target collumn i created a 
-binary one: if (popularity > 50) -> 1 (Hit)
-            else (popularity <50) -> 0 (noHit)
-Beside that, i created another collumn which is our main collumn(popularity) but normalizaed(minmax)
-(values between 0 and 1).
-Here, because our values are between 0 and 100 a minmax normalization is not really needed but 
-i created it in case you want to use more normalized data.
+This folder contains all preprocessed datasets generated during the ETL pipeline.
+Each Approach corresponds to a different machine-learning task, with its own target variable and preprocessing logic.
 
-Approach2
-fileStructure:
-6,0,0.06
-23,0,0.23
-0,0,0.0
-57,1,0.57
-99,3,0.99
-Same for the second, our only feature is popularity(cleaned and well preprocessed)
-assuming that we will do a 4 class classification adn we have no target collumn i created
-one based on this rule:((0-30)) - Niche -> mapped to 0
-                       ((31-60)) - Average -> mapped to 1
-                       ((61-80)) - Popular -> mapped to 2
-                       ((81-100)) - Hit -> mapped to 3
+## Approach 1 — Binary Classification (Hit vs. Non-Hit)
+✔ Dataset File Structure
+popularity	target_binary	popularity_minmax
+6	0	0.06
+23	0	0.23
+0	0	0.00
+57	1	0.57
+99	1	0.99
+✔ Description
 
-Same thing happend with the normalization as in the first one.(you see filesStructure)
+This dataset is built for a binary classification task using a single feature:
+popularity (cleaned, validated, range-checked).
 
-Approach3
+Since the original dataset has no target column, a binary label was created:
 
+1 → Hit (popularity > 50)
+
+0 → Non-Hit (popularity ≤ 50)
+
+An additional column is included:
+
+popularity_minmax → Min-Max normalized popularity (0 → 0.0, 100 → 1.0)
+
+Min-Max normalization is optional because the feature already spans a natural 0–100 scale,
+but it is included for models or optimizers that perform better on normalized inputs.
+
+## Approach 2 — Multiclass Classification (Popularity Tiers)
+✔ Dataset File Structure
+popularity	target_multi	popularity_minmax
+6	0	0.06
+23	0	0.23
+0	0	0.00
+57	1	0.57
+99	3	0.99
+✔ Description
+
+This dataset is built for a four-class classification task, again using the cleaned popularity feature.
+
+Since no target label existed in the raw dataset, a tiered popularity category was created:
+
+Popularity Range	Category Name	Encoded Label
+0–30	Niche	0
+31–60	Average	1
+61–80	Popular	2
+81–100	Hit / Viral	3
+
+As with Approach 1, a Min-Max normalized version of the feature is also included:
+
+popularity_minmax → scaled to (0, 1)
+
+Normalization is optional but provided for consistency across models and approaches.
